@@ -15,13 +15,13 @@ const AddFriendButton = () => {
 		try {
 			// console.log("Adding friend with email:", email);
 			const response = await axios.post('/api/friends/add', { email });
-			console.log("Response:", response);
+			console.log('Response:', response);
 			toast.success('Friend request sent!');
 			setSuccess(true);
 		} catch (error) {
 			setSuccess(false);
-			// console.log(error.response.data);
-			toast.error(error.response.data.error);
+			console.log(error);
+			toast.error(error?.response?.data);
 		}
 	};
 

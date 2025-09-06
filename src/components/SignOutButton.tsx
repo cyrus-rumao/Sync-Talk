@@ -5,7 +5,7 @@ import Link from 'next/link';
 import Button from './ui/Button';
 import { signOut } from 'next-auth/react';
 import { toast } from 'react-hot-toast';
-const SignOutButton = () => {
+const SignOutButton = () => {	
 	const [signingOut, setSigningOut] = useState<boolean>(false);
 	return (
 		<div>
@@ -20,7 +20,7 @@ const SignOutButton = () => {
 							// setSigningOut(false);
 						} finally {
 							setSigningOut(false);
-							toast.error('Something went Wrong');
+							// toast.error('Something went Wrong');
 						}
 					}}
         />

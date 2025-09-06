@@ -37,10 +37,15 @@ export async function POST(req: Request) {
 		}
 
 		if (idToAdd === session.user.id) {
-			return NextResponse.json(
-				{ error: 'You cannot add yourself as a friend' },
-				{ status: 400 }
-			);
+			return new Response('You cannot add yourself as a friend', { status: 400 });
+		}
+		const alreadyFriends = await fetchRedis(
+			'sismember',
+			`user:${idToAdd}:friends`,
+			session.user.id
+		);
+		if (alreadyFriends) {
+			return new Response('Yall are Already Friends', { status: 400 });
 		}
 
 		const isAlreadyAdded = await fetchRedis(
@@ -51,18 +56,6 @@ export async function POST(req: Request) {
 		if (isAlreadyAdded) {
 			return NextResponse.json(
 				{ error: 'Friend request already sent' },
-				{ status: 400 }
-			);
-		}
-
-		const isALreadyFriends = await fetchRedis(
-			'sismember',
-			`user:${session.user.id}:friends`,
-			email
-		);
-		if (isALreadyFriends) {
-			return NextResponse.json(
-				{ error: 'Yall are already Friends' },
 				{ status: 400 }
 			);
 		}

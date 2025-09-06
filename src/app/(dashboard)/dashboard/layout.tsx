@@ -9,6 +9,8 @@ import { Plus } from 'lucide-react';
 import SignOutButton from '@/components/SignOutButton';
 import RequestsButton from '@/components/RequestsButton';
 import { fetchRedis } from '@/helpers/redis';
+import { getFriendsByIds } from '@/helpers/get-friend-by-ids';
+import SidebarChatList from '@/components/SidebarChatList';
 // import FriendRequests from '@/components/FriendRequests';
 interface layoutProps {
 	children: ReactNode;
@@ -38,7 +40,10 @@ const layout = async ({ children }: layoutProps) => {
 		'smembers',
 		`user:${session.user.id}:incoming_friend_requests`
 	)) as string[] | null;
-// console.log(incomingRequests?.length);
+
+	const friends = await getFriendsByIds(session.user.id);
+
+	// console.log(incomingRequests?.length);
 	return (
 		<div className="w-full flex h-screen bg-gray-50">
 			{/* Sidebar */}
@@ -58,7 +63,12 @@ const layout = async ({ children }: layoutProps) => {
 
 				{/* Other contents */}
 				<div className="px-6 py-4 text-sm text-gray-500 uppercase tracking-wide">
-					Other Contents
+					<p>Your Chats </p>
+					<ul>
+						<li>
+							<SidebarChatList />
+						</li>
+					</ul>
 				</div>
 
 				{/* Nav */}
@@ -81,7 +91,7 @@ const layout = async ({ children }: layoutProps) => {
 					<RequestsButton requestCount={incomingRequests?.length} />
 				</nav>
 
-				{/* Footer / User */}	
+				{/* Footer / User */}
 				<div className="flex flex-row items-center justify-center">
 					<Link
 						href="/dashboard"
